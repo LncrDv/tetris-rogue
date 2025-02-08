@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
+    public Vector3 rotationPoint;
     private float previousTime;
     public float fallTime;
     public static int height = 20;
@@ -12,20 +13,33 @@ public class TetrisBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        if(Input.GetKeyDown(KeyCode.Q))
         {
             transform.position += Vector3.left;
             if(!ValidMove())
                 transform.position += Vector3.right;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             transform.position += Vector3.right;
             if (!ValidMove())
                 transform.position += Vector3.left;
         }
-
-        if(Time.time - previousTime > (Input.GetKey(KeyCode.DownArrow) ? fallTime/10 : fallTime))
+        MakePieceFall();
+        
+    }
+    void MakePieceFall()
+    {
+        var newFallTime = fallTime;
+        if (Input.GetKey(KeyCode.S))
+        {
+            newFallTime = fallTime / 10;
+        }
+        else if (Input.GetKey(KeyCode.Z))
+        {
+            newFallTime = 0;
+        }
+        if (Time.time - previousTime > newFallTime)
         {
             transform.position += Vector3.down;
             if (!ValidMove())
@@ -33,7 +47,6 @@ public class TetrisBlock : MonoBehaviour
             previousTime = Time.time;
         }
     }
-
     bool ValidMove()
     {
         foreach(Transform child in transform)
