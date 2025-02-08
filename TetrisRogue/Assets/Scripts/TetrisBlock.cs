@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
@@ -13,7 +14,8 @@ public class TetrisBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q))
+        #region Move Piece
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             transform.position += Vector3.left;
             if(!ValidMove())
@@ -26,7 +28,20 @@ public class TetrisBlock : MonoBehaviour
                 transform.position += Vector3.left;
         }
         MakePieceFall();
-        
+        #endregion
+        #region Rotate Piece
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90f);
+            if(!ValidMove())
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90f);
+        } else if (Input.GetKeyDown(KeyCode.A))
+        {
+            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90f);
+            if (!ValidMove())
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90f);
+        }
+        #endregion
     }
     void MakePieceFall()
     {
